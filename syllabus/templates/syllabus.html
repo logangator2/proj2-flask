@@ -23,8 +23,13 @@
     <td class="project">{{ entry.project}}</td>
   </tr>
   {% endfor %}
-  
 
-
+<table class="current_week">
+  {% for entry in g.schedule %}
+  {% if loop.index == g.current_week %}
+  {% endif %}
+<td class="current_week"{{ entry.week }}></td>
+  {% endfor %}
+{|fmtdate}
 
 </body> </html>
