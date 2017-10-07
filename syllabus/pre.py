@@ -21,7 +21,6 @@ def process(raw):
     field = None
     entry = {}
     cooked = []
-    dates = []
     for line in raw:
         log.debug("Line: {}".format(line))
         line = line.strip()
@@ -42,8 +41,6 @@ def process(raw):
         if field == "begin":
             try:
                 base = arrow.get(content, "MM/DD/YYYY")
-                #base = arrow.utcnow()
-
                 # print("Base date {}".format(base.isoformat()))
             except:
                 raise ValueError("Unable to parse date {}".format(content))
@@ -55,14 +52,11 @@ def process(raw):
             entry['topic'] = ""
             entry['project'] = ""
             entry['week'] = content + " " + str(base.format('MM/DD'))
-            base = base.shift(weeks=+1)
-            entry['current_week'] = False
-
-            current_week = arrow.utcnow()
-            if current_week < base.shift(weeks=+1):
-                entry['current_week'] = 1
+            if test(base):
+                entry['current_day'] = True
             else:
-                entry['current_week'] = 0
+                entry['current_day'] = False
+            base = base.shift(weeks=+1)
 
         elif field == 'topic' or field == 'project':
             entry[field] = content
@@ -74,6 +68,13 @@ def process(raw):
         cooked.append(entry)
 
     return cooked
+
+def test(date):
+    current_day = arrow.utcnow()
+    if current_day < date.shift(weeks=+1) and current_day >= date:
+        return True
+    else:
+        return False
 
 
 def main():

@@ -50,10 +50,14 @@ tr.even {
     font-style: italic;
 }
 
+.class-schedule .week .current_week {
+    background-color: green;
+} 
+
 table .current_schedule {
-    background-color: red;
+    background-color: green;
 }
 
 .current_schedule .current_week {
-    background-color: red;
+    background-color: green;
 }
